@@ -1,0 +1,16 @@
+{
+  "name": "express-in-depth",
+  "version": "1.0.0",
+  "description": "��#\u0000 \u0000E\u0000x\u0000p\u0000r\u0000e\u0000s\u0000s\u0000-\u0000I\u0000n\u0000-\u0000D\u0000e\u0000p\u0000t\u0000h\u0000\r\u0000 \u0000",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.0"
+  },
+  "type": "module"
+}
