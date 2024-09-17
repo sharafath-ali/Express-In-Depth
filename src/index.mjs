@@ -16,6 +16,27 @@ app.get('/', (request, response) => {
   response.status(200).send({ mes: 'hello' })
 })
 
+app.get('/api/users/:id', (req, res) => {
+  console.log('Received request with params:', req.params);
+  const userId = parseInt(req.params.id, 10);
+
+  if (isNaN(userId)) {
+    console.log('Invalid user ID:', req.params.id);
+    return res.status(400).send({ message: 'Invalid user ID' });
+  }
+
+  const user = mockUsers.find(e => e.id === userId);
+
+  if (user) {
+    console.log('User found:', user);
+    res.send(user);
+  } else {
+    console.log('User not found with ID:', userId);
+    res.status(404).send({ message: 'User not found' });
+  }
+});
+
+
 app.get('/api/users', (req, res) => {
   res.send(mockUsers)
 })
