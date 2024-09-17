@@ -38,7 +38,14 @@ app.get('/api/users/:id', (req, res) => {
 
 
 app.get('/api/users', (req, res) => {
-  res.send(mockUsers)
+  //http://localhost:3000/api/users?filter=username&value=a
+  console.log(req.query)
+  const { query: { filter, value } } = req;
+  if (filter && value) {
+    res.send(mockUsers.filter(e => e[filter].includes(value)))
+  } else {
+    res.send(mockUsers)
+  }
 })
 
 app.get("/api/products", (request, response) => {
