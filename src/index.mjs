@@ -54,7 +54,51 @@ app.put('/api/users/:id', (req, res) => {
 });
 
 
-app.get('/api/users/:id', (req, res) => {
+app.patch('/api/users/:id', (req, res) => {
+  const { body, params } = req;
+  const userId = parseInt(params.id, 10);
+
+  // Check if id is a valid number and matches the original string
+  if (!isNaN(userId) && params.id === userId.toString()) {
+    const userIndex = mockUsers.findIndex(e => e.id === userId);
+
+    if (userIndex !== -1) {
+      mockUsers[userIndex] = { ...mockUsers[userIndex], ...body };
+      res.json(mockUsers);
+    } else {
+      res.status(404).send('User not found');
+    }
+  } else {
+    res.status(400).send('Invalid user ID');
+  }
+});
+
+app.delete('/api/users/:id', (req, res) => {
+  const { params } = req;
+  const userId = parseInt(params.id, 10);
+
+  if (!isNaN(userId) && params.id === userId.toString()) {
+    const userIndex = mockUsers.findIndex(e => e.id === userId);
+
+    if (userIndex !== -1) {
+      mockUsers.splice(userIndex, 1);
+      res.json(mockUsers)
+    } else {
+      res.status(404).send('User not found');
+    }
+  } else {
+    res.status(400).send('Invalid user ID');
+  }
+});
+
+const logger = (req, res, next) => {
+  console.log(`${req.method} - ${req.url}`)
+  next()
+}
+app.use(logger)  //it will call in every request
+
+//if i only wanna call for this
+app.get('/api/users/:id', logger, (req, res) => {
   console.log('Received request with params:', req.params);
   const userId = parseInt(req.params.id, 10);
 
