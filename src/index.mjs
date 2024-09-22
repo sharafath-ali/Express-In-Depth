@@ -1,4 +1,5 @@
 import express from 'express'
+import { query, validationResult, body, matchedData } from 'express-validator';
 
 const app = express()
 
@@ -82,9 +83,11 @@ app.get('/api/users/:id', logger, (req, res) => {
 });
 
 
-app.get('/api/users', (req, res) => {
+app.get('/api/users', query('filter').isString().withMessage('must be string').notEmpty().withMessage('must not be empty'), (req, res) => {
   //http://localhost:3000/api/users?filter=username&value=a
   console.log(req.query)
+  const Result = validationResult(req)
+  console.log(Result)
   const { query: { filter, value } } = req;
   if (filter && value) {
     res.send(mockUsers.filter(e => e[filter].includes(value)))
@@ -93,9 +96,17 @@ app.get('/api/users', (req, res) => {
   }
 })
 
-app.post('/api/users', (req, res) => {
-  const { body } = req;
-  const user = { id: mockUsers[mockUsers.length - 1].id + 1, ...body }
+app.post('/api/users', body('username').notEmpty().withMessage('must not  be empty'), body('displayName').notEmpty().withMessage('must not  be empty'), (req, res) => {
+  const Result = validationResult(req)
+  console.log(Result);
+
+  if (!Result.isEmpty()) {
+    return res.status(400).json({ error: Result.array() })
+  }
+
+  const data = matchedData(req)
+  console.log(data)
+  const user = { id: mockUsers[mockUsers.length - 1].id + 1, ...data }
   mockUsers.push(user)
   res.json(mockUsers)
 })
