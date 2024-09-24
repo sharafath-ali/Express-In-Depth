@@ -66,7 +66,7 @@ const logger = (req, res, next) => {
 
 app.use(logger); //it will call in every request
 
-//if i only wanna call for this
+//if i only wanna call logger for this route
 app.get('/api/users/:id', logger, (req, res) => {
   const userId = parseInt(req.params.id, 10);
 
